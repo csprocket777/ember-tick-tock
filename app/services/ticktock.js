@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Service.extend({
   now: null,
+  hour: null,
   currentOffset: 0,
   useRemoteTimestamp: false,
   remoteSyncFrequency: 60,
@@ -42,6 +43,7 @@ export default Ember.Service.extend({
   
   _syncLocalLoop: function() {
     Ember.run.later(this, this._setCurrentTime, 1000);
+    Ember.run.later(this, this._setCurrentHour, 3600);
   },
   
   _setServerTime: function() {
@@ -71,6 +73,19 @@ export default Ember.Service.extend({
 
     now = moment.unix(now);
     Ember.set(this, 'now', now);
+
+    this._syncLocalLoop();
+  }
+  
+  _setCurrentHour: function() {
+    var hour = moment('HH').unix();
+    
+    if (Ember.get(this, 'useRemoteTimestamp')) {
+      hour += Ember.get(this, 'currentOffset');
+    }
+
+    hour = moment.unix(hour);
+    Ember.set(this, 'hour', hour);
 
     this._syncLocalLoop();
   }
