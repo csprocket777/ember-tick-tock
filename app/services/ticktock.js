@@ -73,7 +73,12 @@ export default Ember.Service.extend({
     now = moment.unix(now);
     Ember.set(this, 'now', now);
 
-    if( Ember.get(this, 'hour') !== now.format('HH') )
+    if( !Ember.isBlank(Ember.get(this, 'hour')) && Ember.get(this, 'hour').format('HH') !== now.format('HH') )
+    {
+      Ember.set(this, 'hour', now);
+    }
+
+    if( Ember.isBlank(Ember.get(this, 'hour')) )
     {
       Ember.set(this, 'hour', now);
     }
