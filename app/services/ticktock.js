@@ -75,7 +75,7 @@ export default Ember.Service.extend({
     Ember.set(this, 'now', now);
 
     this._syncLocalLoop();
-  }
+  },
   
   _setCurrentHour: function() {
     var hour = moment('HH').unix();
